@@ -1,0 +1,54 @@
+//master
+
+#include <Wire.h>
+
+int pushbutton=A0;
+
+void setup()
+{
+  Wire.begin();
+  pinMode(pushbutton,INPUT);
+}
+
+int x = 0;
+
+void loop()
+{
+  Wire.beginTransmission(4); 
+  x=digitalRead(pushbutton);
+   Wire.write(x);                
+  Wire.endTransmission();   
+  delay(100);
+}
+
+
+//slave
+#include <Wire.h>
+int led=12;
+void setup()
+{
+  Wire.begin(4);                
+  Wire.onReceive(buttonpress); 
+  Serial.begin(9600);
+  pinMode(led,OUTPUT);
+}
+
+void loop()
+{
+  delay(100);
+}
+
+
+void buttonpress(int howMany)
+{
+  int x = Wire.read();    
+  Serial.println(x); 
+ if (x==1)
+ {
+   digitalWrite(led,HIGH);
+ }
+ else
+ {
+   digitalWrite(led,LOW);
+ }
+}
